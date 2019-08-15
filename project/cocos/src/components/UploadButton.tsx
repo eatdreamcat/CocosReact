@@ -3,7 +3,7 @@ import { Upload, message, Button, Icon } from "antd";
 
 const props = {
   name: "file",
-  action: "https://eatdreamcat.github.io/Monster-Ball/table/",
+  action: "",
   headers: {
     authorization: "authorization-text"
   },
