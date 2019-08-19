@@ -23,10 +23,16 @@ const props = {
   }
 };
 
-export default class UploadButton extends React.Component {
+interface props {
+  project: string;
+}
+export default class UploadButton extends React.Component<props> {
   click = () => {};
 
   render() {
+    props.action =
+      "http://104.224.151.19:1090/upload?name=" + this["props"]["project"];
+    console.log(props.action);
     return (
       <Upload {...props}>
         <Button>
