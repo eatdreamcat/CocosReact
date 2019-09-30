@@ -25,17 +25,20 @@ function toJson(basePath, fileName, callback) {
   for (let sheet in book.Sheets) {
     let jsonData = xlsx.utils.sheet_to_json(book.Sheets[sheet]);
     let dataType = jsonData[0];
+    //console.log(dataType);
     let dataKey = jsonData[1];
     let dataArr = jsonData.splice(2, jsonData.length - 2);
     let json = [];
     for (let data of dataArr) {
       let resData = {};
       for (let key in data) {
+        //console.log(key);
+        //console.log(dataType[key]);
         switch (dataType[key].toLowerCase()) {
           case "type<>":
           case "string<>":
           case "number<>":
-            data[key] = data[key].split("_");
+            data[key] = data[key].toString().split("_");
             break;
         }
         resData[dataKey[key]] = data[key];
@@ -47,7 +50,7 @@ function toJson(basePath, fileName, callback) {
       .trim()
       .split(" ")
       .join("_");
-    console.log(jsonPath + jsonName);
+    //console.log(jsonPath + jsonName);
 
     fs.writeFileSync(jsonPath + jsonName, JSON.stringify(json));
     callback();
@@ -81,9 +84,13 @@ app.post("/upload", upload.any(), (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        toJson(target_path, req.files[0].originalname, () => {
-          res.send();
-        });
+        try {
+          toJson(target_path, req.files[0].originalname, () => {
+            res.send();
+          });
+        } catch (error) {
+          res.send(error);
+        }
       }
     }
   );

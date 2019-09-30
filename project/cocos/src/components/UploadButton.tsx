@@ -31,7 +31,7 @@ export default class UploadButton extends React.Component<props> {
 
   render() {
     props.action =
-      "http://104.224.151.19:1090/upload?name=" + this["props"]["project"];
+      "http://192.168.50.169:1090/upload?name=" + this["props"]["project"];
     console.log(props.action);
     return (
       <Upload {...props}>
