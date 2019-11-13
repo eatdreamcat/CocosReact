@@ -22,8 +22,10 @@ function toJson(basePath, fileName, callback) {
   }
 
   book = xlsx.readFile(basePath + fileName);
+
   for (let sheet in book.Sheets) {
     let jsonData = xlsx.utils.sheet_to_json(book.Sheets[sheet]);
+    if (jsonData.length <= 0) continue;
     let dataType = jsonData[0];
     //console.log(dataType);
     let dataKey = jsonData[1];
@@ -37,8 +39,17 @@ function toJson(basePath, fileName, callback) {
         switch (dataType[key].toLowerCase()) {
           case "type<>":
           case "string<>":
+            data[key] = data[key].toString().split("_");
+            break;
           case "number<>":
             data[key] = data[key].toString().split("_");
+            for (let i = 0; i < data[key].length; i++) {
+              if (data[key][i].split(".").length > 1) {
+                data[key][i] = parseFloat(data[key][i]);
+              } else {
+                data[key][i] = parseInt(data[key][i]);
+              }
+            }
             break;
         }
         resData[dataKey[key]] = data[key];
